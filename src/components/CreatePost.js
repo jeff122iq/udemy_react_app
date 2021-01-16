@@ -1,18 +1,22 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import Page from "./Page";
 import Axios from "axios";
 import {withRouter} from "react-router-dom"
+import DispatchContext from "../DispatchContext";
+import StateContext from "../StateContext";
 
 const CreatePost = (props) => {
 
     const [title, setTitle] = useState();
     const [body, setBody] = useState();
+    const appDispatch = useContext(DispatchContext)
+    const appState = useContext(StateContext)
 
     async function handleSubmit(event) {
         event.preventDefault()
         try {
-            const response = await Axios.post("/create-post", {title, body, token: localStorage.getItem("complexappToken")})
-            props.addFlashMessage("Your post is add!")
+            const response = await Axios.post("/create-post", {title, body, token: appState.user.token})
+            appDispatch({type: "flashMessage", value: "Post is created!"})
             props.history.push(`/post/${response.data}`)
             console.log("New post was created!")
         } catch(error) {
@@ -37,7 +41,9 @@ const CreatePost = (props) => {
                         <small>Body Content</small>
                     </label>
                     <textarea onChange={event => setBody(event.target.value)} name="body" id="post-body" className="body-content tall-textarea form-control"
-                              type="text"></textarea>
+                              type="text">
+
+                    </textarea>
                 </div>
 
                 <button className="btn btn-primary">Save New Post</button>

@@ -1,8 +1,8 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 
 const Container = (props) => {
     return (
-        <div className={"container py-md-5" + props.wide ? "" : "container--narrow"}>
+        <div className={"container py-md-5" + props.wide ? "container py-md-5" : "container--narrow"}>
             {props.children}
         </div>
     );
